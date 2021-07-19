@@ -99,6 +99,7 @@
 #include <streams/interface_stream.h>
 #include <file/file_path.h>
 #include <retro_assert.h>
+#include <retro_state.h>
 #include <retro_miscellaneous.h>
 #include <queues/message_queue.h>
 #include <queues/task_queue.h>
@@ -12820,7 +12821,7 @@ static bool command_event_save_auto_state(
    fill_pathname_noext(savestate_name_auto, global->name.savestate,
          ".auto", sizeof(savestate_name_auto));
 
-   ret = content_save_state((const char*)savestate_name_auto, true, true);
+   ret = content_push_state((const char*)savestate_name_auto, true, true);
    RARCH_LOG("%s \"%s\" %s.\n",
          msg_hash_to_str(MSG_AUTO_SAVE_STATE_TO),
          savestate_name_auto, ret ?
@@ -13106,7 +13107,8 @@ static bool command_event_main_state(
                bool frame_time_counter_reset_after_save_state =
                      settings->bools.frame_time_counter_reset_after_save_state;
 
-               content_save_state(state_path, true, false);
+               content_push_state(state_path, true, false);
+               content_sync_state(state_path, )
 
                /* Clean up excess savestates if necessary */
                if (savestate_auto_index && (savestate_max_keep > 0))
